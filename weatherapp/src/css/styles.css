@@ -96,7 +96,7 @@ header figure img {
 nav {
   background-color: #1f69be;
   padding: 10px 2%; }
-  nav form input {
+  nav div form input {
     width: 100px;
     padding: 5px 0 5px 10px;
     border: 1px solid #fff;
@@ -107,8 +107,24 @@ nav {
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, white 60%, rgba(255, 255, 255, 0.6) 100%);
     border-radius: 5px;
     padding: 5px 10px;
-    margin-left: 4%; }
-
+    margin-left: 20px;
+    margin-right: 20px; }
+  nav .search-bar {
+    float: left;
+  }
+  nav .scale-toggle {
+  float: left;
+  font-size: 16px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  color: #333;
+  margin-top: 3px;
+}
+nav::after {
+  content: "";
+  display: block;
+  clear: both;
+}
 /*end nav*/
 /* MAIN  */
 main {

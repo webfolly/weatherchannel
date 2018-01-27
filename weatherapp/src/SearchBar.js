@@ -1,4 +1,5 @@
 import React from 'react';
+
 export default class SearchBar extends React.Component {
     constructor(props){
         super(props);
@@ -14,12 +15,12 @@ export default class SearchBar extends React.Component {
     }
     render(){
         return(
-            <nav>
+            <div className="search-bar">
                 <form action="#" onSubmit={this.handleSubmit}>
                     <input type="text" value={this.props.value} onChange={this.handleChanges} />
                     <button>Search</button>
                 </form>
-            </nav>
+            </div>
         );
     }
 }

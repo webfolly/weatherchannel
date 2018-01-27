@@ -2,6 +2,7 @@ import React from 'react';
 import CityConditions from './CityConditions';
 import Forecast from './Forecast';
 import SearchBar from './SearchBar';
+import ScaleToggle from './ScaleToggle';
 import { fetchConditionData, fetchForecatData } from './api/weahter';
 
 export default class WeatherChannel extends React.Component {
@@ -10,10 +11,12 @@ export default class WeatherChannel extends React.Component {
         this.state = {
             condition: {},
             days: [],
-            value:this.props.defaultCity
+            value:this.props.defaultCity,
+            scale:'Celsius'
         }
         this.handleConditionData = this.handleConditionData.bind(this);
         this.handleForecastData = this.handleForecastData.bind(this);
+        this.handleScaleChange = this.handleScaleChange.bind(this);
         this.onValueChange = this.onValueChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
@@ -25,6 +28,9 @@ export default class WeatherChannel extends React.Component {
     }
     onValueChange(value) {
         this.setState({value:value});
+    }
+    handleScaleChange(value) {
+        this.setState({scale:value});
     }
     onSubmit(value) {
         if(value) {
@@ -39,12 +45,15 @@ export default class WeatherChannel extends React.Component {
     render() {
         return(
             <main>
-                <SearchBar value={this.state.value} onValueChange={this.onValueChange} onSubmit={this.onSubmit}/>
+                <nav>
+                    <SearchBar value={this.state.value} onValueChange={this.onValueChange} onSubmit={this.onSubmit}/>
+                    <ScaleToggle scale={this.state.scale} onScaleChange={this.handleScaleChange}/>
+                </nav>
                 <section id="left">
-                    <CityConditions condition={this.state.condition}/>
+                    <CityConditions condition={this.state.condition} scale={this.state.scale} />
                 </section>
                 <section id="right">
-                    <Forecast days={this.state.days} />
+                    <Forecast days={this.state.days} scale={this.state.scale} />
                 </section>
             </main>
         );
