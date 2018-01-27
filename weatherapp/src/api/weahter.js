@@ -62,7 +62,8 @@ function conditionDataFormat(respData) {
     let conditionData = {};
     conditionData.city = respData.current_observation.display_location.city;
     conditionData.weather = respData.current_observation.weather;
-    conditionData.temp = respData.current_observation.temp_c+'c';
+    conditionData.temp_c = respData.current_observation.temp_c;
+    conditionData.temp_f = respData.current_observation.temp_f;
     conditionData.desc = respData.forecast.txt_forecast.forecastday[0].fcttext_metric; 
     return conditionData;
 }
@@ -70,7 +71,7 @@ function forecastDataFormat(respData) {
     let forecastData = [];
     let tmp = respData.forecast.simpleforecast.forecastday.filter((item,index) => index%2===0 ).slice(0,5);
     for(let i=0;i<tmp.length;i++) {
-        forecastData[i] = {weekday:tmp[i].date.weekday,high:tmp[i].high.celsius, low:tmp[i].low.celsius,icon:tmp[i].icon_url} ;
+        forecastData[i] = {weekday:tmp[i].date.weekday,high_c:tmp[i].high.celsius, low_c:tmp[i].low.celsius,high_f:tmp[i].high.fahrenheit,low_f:tmp[i].low.fahrenheit,icon:tmp[i].icon_url} ;
     }
     return forecastData;
 }
