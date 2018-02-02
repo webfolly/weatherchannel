@@ -13,5 +13,7 @@ function DailyItem(props) {
     );
 }
 export default function Forecast(props){
-    return props.days.map((item,index) => <DailyItem key={index} days={item} scale={props.scale}/>);
+    let end = Number(props.period);
+    let daysToDisplay = props.days.slice(0,end);
+    return daysToDisplay.map((item,index) => <DailyItem key={index} days={item} scale={props.scale}/>);
 }

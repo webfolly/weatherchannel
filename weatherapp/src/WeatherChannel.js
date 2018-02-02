@@ -4,7 +4,7 @@ import Forecast from './Forecast';
 import SearchBar from './SearchBar';
 import ScaleToggle from './ScaleToggle';
 import PeriodToggle from './PeriodToggle';
-import { fetchConditionData, fetchForecatData } from './api/weahter';
+import { fetchConditionData, fetchForecatData } from './api/weather';
 
 export default class WeatherChannel extends React.Component {
     constructor(props) {
@@ -22,7 +22,7 @@ export default class WeatherChannel extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleConditionData(data) {
-       this.setState({condition:data});
+        this.setState({condition:data});
     }
     handleForecastData(data) {
         this.setState({days:data});
@@ -30,7 +30,6 @@ export default class WeatherChannel extends React.Component {
     handleValueChange(name,value) {
         switch(name) {
             case 'period':
-                fetchForecatData(this.state.city,value,this.handleForecastData); 
                 this.setState({period:value});
                 break;
             case 'searchBar':
@@ -46,12 +45,12 @@ export default class WeatherChannel extends React.Component {
     handleSubmit(value) {
         if(value) {
             fetchConditionData(value,this.handleConditionData);
-            fetchForecatData(value,this.state.period,this.handleForecastData); 
+            fetchForecatData(value,this.handleForecastData); 
         }
     }
     componentDidMount() {
         fetchConditionData(this.state.city,this.handleConditionData);
-        fetchForecatData(this.state.city,this.state.period,this.handleForecastData);
+        fetchForecatData(this.state.city,this.handleForecastData);
     }
     render() {
         return(
@@ -65,7 +64,7 @@ export default class WeatherChannel extends React.Component {
                     <CityConditions condition={this.state.condition} scale={this.state.scale} />
                 </section>
                 <section id="right">
-                    <Forecast days={this.state.days} scale={this.state.scale} />
+                    <Forecast days={this.state.days} scale={this.state.scale} period={this.state.period} />
                 </section>
             </main>
         );
