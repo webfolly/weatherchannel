@@ -3,6 +3,7 @@ import CityConditions from './CityConditions';
 import Forecast from './Forecast';
 import SearchBar from './SearchBar';
 import ScaleToggle from './ScaleToggle';
+import PeriodToggle from './PeriodToggle';
 import { fetchConditionData, fetchForecatData } from './api/weahter';
 
 export default class WeatherChannel extends React.Component {
@@ -11,14 +12,14 @@ export default class WeatherChannel extends React.Component {
         this.state = {
             condition: {},
             days: [],
-            value:this.props.defaultCity,
-            scale:'Celsius'
+            city:this.props.defaultCity,
+            scale:'Celsius',
+            period:'3'
         }
         this.handleConditionData = this.handleConditionData.bind(this);
         this.handleForecastData = this.handleForecastData.bind(this);
-        this.handleScaleChange = this.handleScaleChange.bind(this);
-        this.onValueChange = this.onValueChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.handleValueChange = this.handleValueChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleConditionData(data) {
        this.setState({condition:data});
@@ -26,28 +27,39 @@ export default class WeatherChannel extends React.Component {
     handleForecastData(data) {
         this.setState({days:data});
     }
-    onValueChange(value) {
-        this.setState({value:value});
+    handleValueChange(name,value) {
+        switch(name) {
+            case 'period':
+                fetchForecatData(this.state.city,value,this.handleForecastData); 
+                this.setState({period:value});
+                break;
+            case 'searchBar':
+                this.setState({city:value});
+                break;
+            case 'scale':
+                this.setState({scale:value});
+                break;
+            default:
+                break;
+        }
     }
-    handleScaleChange(value) {
-        this.setState({scale:value});
-    }
-    onSubmit(value) {
+    handleSubmit(value) {
         if(value) {
             fetchConditionData(value,this.handleConditionData);
-            fetchForecatData(value,this.handleForecastData); 
+            fetchForecatData(value,this.state.period,this.handleForecastData); 
         }
     }
     componentDidMount() {
-        fetchConditionData(this.state.value,this.handleConditionData);
-        fetchForecatData(this.state.value,this.handleForecastData);
+        fetchConditionData(this.state.city,this.handleConditionData);
+        fetchForecatData(this.state.city,this.state.period,this.handleForecastData);
     }
     render() {
         return(
             <main>
                 <nav>
-                    <SearchBar value={this.state.value} onValueChange={this.onValueChange} onSubmit={this.onSubmit}/>
-                    <ScaleToggle scale={this.state.scale} onScaleChange={this.handleScaleChange}/>
+                    <SearchBar value={this.state.city} onChange={this.handleValueChange} onSubmit={this.handleSubmit}/>
+                    <ScaleToggle scale={this.state.scale} onChange={this.handleValueChange}/>
+                    <PeriodToggle onChange={this.handleValueChange} period={this.state.period}/>
                 </nav>
                 <section id="left">
                     <CityConditions condition={this.state.condition} scale={this.state.scale} />

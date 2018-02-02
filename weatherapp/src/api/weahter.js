@@ -30,7 +30,7 @@ export function fetchConditionData(city,onHandleConditionData){
     }
     conditionXHR.send();
 }
-export function fetchForecatData(city,onHandleForecastData){
+export function fetchForecatData(city,period,onHandleForecastData){
     forecastXHR.open('GET',`${FORECAST_BASE_URL}${city}.json`);
     forecastXHR.onload = () => {
         if (forecastXHR.status === 200) {
@@ -44,7 +44,7 @@ export function fetchForecatData(city,onHandleForecastData){
                 }
             } else if (respData.forecast){
                 try {
-                    var forecastData = forecastDataFormat(respData);
+                    var forecastData = forecastDataFormat(respData,period);
                     onHandleForecastData(forecastData);
                 } catch(e) {
                     alert(e);
@@ -67,9 +67,10 @@ function conditionDataFormat(respData) {
     conditionData.desc = respData.forecast.txt_forecast.forecastday[0].fcttext_metric; 
     return conditionData;
 }
-function forecastDataFormat(respData) {
+function forecastDataFormat(respData,period) {
     let forecastData = [];
-    let tmp = respData.forecast.simpleforecast.forecastday.filter((item,index) => index%2===0 ).slice(0,5);
+    let end = parseInt(period);
+    let tmp = respData.forecast.simpleforecast.forecastday.filter((item,index) => index%2===0 ).slice(0,end);
     for(let i=0;i<tmp.length;i++) {
         forecastData[i] = {weekday:tmp[i].date.weekday,high_c:tmp[i].high.celsius, low_c:tmp[i].low.celsius,high_f:tmp[i].high.fahrenheit,low_f:tmp[i].low.fahrenheit,icon:tmp[i].icon_url} ;
     }
