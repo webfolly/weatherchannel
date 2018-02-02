@@ -8,7 +8,7 @@ function DailyItem(props) {
             <span> {day.weekday} </span>
             <span> <img src={day.icon} alt="weather_icon"/></span>
             <span> {scale === "Celsius" ? day.high_c : day.high_f } </span>
-            <span> {scale === "Fahrenheit" ? day.low_c : day.low_f } </span>
+            <span> {scale === "Celsius" ? day.low_c : day.low_f } </span>
         </div>
     );
 }
