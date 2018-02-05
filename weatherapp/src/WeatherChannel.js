@@ -4,7 +4,8 @@ import Forecast from './Forecast';
 import SearchBar from './SearchBar';
 import ScaleToggle from './ScaleToggle';
 import PeriodToggle from './PeriodToggle';
-import { fetchConditionData, fetchForecatData } from './api/weather';
+import fetchWeatherData from './api/weather';
+import axios from 'axios';
 
 export default class WeatherChannel extends React.Component {
     constructor(props) {
@@ -16,42 +17,37 @@ export default class WeatherChannel extends React.Component {
             scale:'Celsius',
             period:'3'
         }
-        this.handleConditionData = this.handleConditionData.bind(this);
-        this.handleForecastData = this.handleForecastData.bind(this);
+        this.handleWeatherData = this.handleWeatherData.bind(this);
         this.handleValueChange = this.handleValueChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleConditonData = this.handleConditonData.bind(this);
     }
-    handleConditionData(data) {
-        this.setState({condition:data});
+    handleWeatherData(condition,days) {
+        if(condition.city && days.length) {
+            this.setState({condition,days});
+        }
     }
-    handleForecastData(data) {
-        this.setState({days:data});
+    handleConditonData(condition) {
+        this.setState({condition});
     }
     handleValueChange(name,value) {
-        switch(name) {
-            case 'period':
-                this.setState({period:value});
-                break;
-            case 'searchBar':
-                this.setState({city:value});
-                break;
-            case 'scale':
-                this.setState({scale:value});
-                break;
-            default:
-                break;
-        }
+        this.setState({[name]:value});
     }
     handleSubmit(value) {
         if(value) {
-            fetchConditionData(value,this.handleConditionData);
-            fetchForecatData(value,this.handleForecastData); 
-        }
+            fetchWeatherData(this.state.city)
+                .then(axios.spread((conditionData,forecastData) => this.handleWeatherData(conditionData,forecastData)))
+                .catch(e => console.log(e));
+        } 
     }
     componentDidMount() {
-        fetchConditionData(this.state.city,this.handleConditionData);
-        fetchForecatData(this.state.city,this.handleForecastData);
-    }
+        fetchWeatherData(this.state.city)
+            .then(axios.spread((conditionData,forecastData) => this.handleWeatherData(conditionData,forecastData)))
+            .catch(e => console.log(e)); 
+        /*fetchConditionData(this.state.city)
+            .then( result => this.handleConditonData(result));*/
+        }
+        
     render() {
         return(
             <main>

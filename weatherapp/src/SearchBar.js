@@ -6,7 +6,7 @@ export default function SearchBar(props) {
                 <form action="#" onSubmit = { 
                         (e) => { props.onSubmit(props.value);e.preventDefault();}
                     }>
-                    <input type="text" name="searchBar" value={props.value} onChange={
+                    <input type="text" name="city" value={props.value} onChange={
                         (e) => props.onChange(e.target.name,e.target.value)   
                     } />
                     <button>Search</button>
